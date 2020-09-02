@@ -13,7 +13,7 @@ use crate::{
         OrderBookRequest, OrderBookResponse, OrderCanceled, OrderStatus, Paginator, Side, Ticker,
         Trade, TradeHistoryRequest,
     },
-    shared::{timestamp_to_datetime, Result},
+    shared::{timestamp_to_naive_datetime, Result},
 };
 use async_trait::async_trait;
 
@@ -292,7 +292,7 @@ impl TryFrom<Interval> for u32 {
         match value {
             Interval::OneMinute => Ok(60),
             Interval::FiveMinutes => Ok(300),
-            Interval::FiftyMinutes => Ok(900),
+            Interval::FifteenMinutes => Ok(900),
             Interval::OneHour => Ok(3600),
             Interval::SixHours => Ok(21600),
             Interval::OneDay => Ok(86400),
@@ -348,8 +348,8 @@ impl From<&Paginator<u64>> for model::Paginator {
 impl From<Paginator<u64>> for model::DateRange {
     fn from(paginator: Paginator<u64>) -> Self {
         Self {
-            start: paginator.start_time.map(timestamp_to_datetime),
-            end: paginator.end_time.map(timestamp_to_datetime),
+            start: paginator.start_time.map(timestamp_to_naive_datetime),
+            end: paginator.end_time.map(timestamp_to_naive_datetime),
         }
     }
 }
@@ -357,8 +357,8 @@ impl From<Paginator<u64>> for model::DateRange {
 impl From<&Paginator<u64>> for model::DateRange {
     fn from(paginator: &Paginator<u64>) -> Self {
         Self {
-            start: paginator.start_time.map(timestamp_to_datetime),
-            end: paginator.end_time.map(timestamp_to_datetime),
+            start: paginator.start_time.map(timestamp_to_naive_datetime),
+            end: paginator.end_time.map(timestamp_to_naive_datetime),
         }
     }
 }

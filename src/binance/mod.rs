@@ -321,7 +321,7 @@ impl From<Interval> for &str {
             Interval::OneMinute => "1m",
             Interval::ThreeMinutes => "3m",
             Interval::FiveMinutes => "5m",
-            Interval::FiftyMinutes => "15m",
+            Interval::FifteenMinutes => "15m",
             Interval::ThirtyMinutes => "30m",
             Interval::OneHour => "1h",
             Interval::TwoHours => "2h",
