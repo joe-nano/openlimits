@@ -29,7 +29,7 @@ impl Nash {
         timeout: u64,
     ) -> Self {
         Nash {
-            transport: Client::from_key_data(secret, session, client_id, sandbox, timeout)
+            transport: Client::from_key_data(secret, session, None, client_id, sandbox, timeout)
                 .await
                 .unwrap(),
         }
@@ -150,34 +150,29 @@ impl Exchange for Nash {
             Nash::convert_limit_order(req, nash_protocol::types::BuyOrSell::Buy);
 
         let resp = self.transport.run(req).await;
+        println!("{:?}", resp);
+
         Ok(Nash::unwrap_response::<nash_protocol::protocol::place_order::types::LimitOrderResponse>(resp)?.into())
     }
 
-    async fn limit_sell(
-        &self,
-        req: &OpenLimitOrderRequest,
-    ) -> Result<Order<Self::OrderIdType>> {
+    async fn limit_sell(&self, req: &OpenLimitOrderRequest) -> Result<Order<Self::OrderIdType>> {
         let req: nash_protocol::protocol::place_order::types::LimitOrderRequest =
             Nash::convert_limit_order(req, nash_protocol::types::BuyOrSell::Sell);
 
         let resp = self.transport.run(req).await;
+        println!("{:?}", resp);
+
         Ok(Nash::unwrap_response::<nash_protocol::protocol::place_order::types::LimitOrderResponse>(resp)?.into())
     }
 
-    async fn market_sell(
-        &self,
-        _req: &OpenMarketOrderRequest,
-    ) -> Result<Order<Self::OrderIdType>> {
+    async fn market_sell(&self, _req: &OpenMarketOrderRequest) -> Result<Order<Self::OrderIdType>> {
         let err = MissingImplementationContent {
             message: String::from("Not supported order type"),
         };
         Err(OpenLimitError::MissingImplementation(err))
     }
 
-    async fn market_buy(
-        &self,
-        _req: &OpenMarketOrderRequest,
-    ) -> Result<Order<Self::OrderIdType>> {
+    async fn market_buy(&self, _req: &OpenMarketOrderRequest) -> Result<Order<Self::OrderIdType>> {
         let err = MissingImplementationContent {
             message: String::from("Not supported order type"),
         };
