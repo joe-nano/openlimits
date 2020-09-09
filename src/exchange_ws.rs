@@ -13,12 +13,8 @@ pub struct OpenLimitsWs<E: ExchangeWs> {
 
 #[async_trait]
 pub trait ExchangeWs: Stream + Unpin {
-    type WebSocketMessageType;
     fn subscribe(&self, subscription: Subscription) -> Result<()>;
-    fn parse_message(
-        &self,
-        message: Self::WebSocketMessageType,
-    ) -> Result<OpenLimitsWebsocketMessage>;
+    fn parse_message(&self, message: Self::Item) -> Result<OpenLimitsWebsocketMessage>;
 }
 
 impl<E: ExchangeWs> Stream for OpenLimitsWs<E> {
